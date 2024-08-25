@@ -16,11 +16,11 @@ int main()
     int hits = 0;
     for (int i = 0, elem; i < count_of_elems; ++i) {
         std::cin >> elem;
-        
+
         if (cache.lookup_update(elem, int2int))
             hits++;
 
-        cache.print();
+        // cache.print();
     }
 
     std::cout << hits << "\n";

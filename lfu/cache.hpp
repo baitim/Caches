@@ -57,8 +57,8 @@ public:
             insert_elem(elem, key);
             return false;
         }
+        
         update_elem(cache_it, elem, key);
-
         return true;
     }
 
