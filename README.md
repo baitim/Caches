@@ -2,7 +2,7 @@
 
 ## Description
 
- Implementation of the lfu cache.
+ Implementation of the LFU(least frequently used) cache.
 
 ## How to run
 
@@ -25,6 +25,8 @@
 
 3. Run testing <br>
     write <code>./run_tests.sh</code> in terminal
+
+The test result will be in the "answer.dat" file
 
 <p align="center"><img src="https://github.com/baitim/LFU_cache/blob/main/images/cat.gif" width="40%"></p>
 

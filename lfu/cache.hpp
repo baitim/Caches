@@ -1,6 +1,5 @@
 #pragma once
 
-#include <list>
 #include <map>
 #include <unordered_map>
 #include "ANSI_colors.hpp"
@@ -9,47 +8,49 @@ int int2int(int elem) {
     return elem;
 }
 
-template <typename ElemT, typename KeyT = int> class cache_t {
+namespace cache {
+
+template <typename ElemT, typename KeyT = int> class cache_t final {
     int size_;
-    using map_iter   = typename std::multimap<int, ElemT>::iterator;
-    using cache_iter = typename std::unordered_map<KeyT, map_iter>::iterator;
-    std::multimap<int, ElemT> freq_map_;       // frequency - element
-    std::unordered_map<KeyT, map_iter> cache_;
+    using cache_iter = typename std::multimap<int, ElemT>::iterator;
+    using hash_iter  = typename std::unordered_map<KeyT, cache_iter>::iterator;
+    std::multimap<int, ElemT>            cache_; // frequency - element
+    std::unordered_map<KeyT, cache_iter> hash_;
 
 public:
     cache_t(int size) : size_(size) {};
 
     bool full() const { 
-        return (cache_.size() == size_); 
+        return (hash_.size() == size_); 
     }
 
     template <typename HashFuncT> void delete_elem(HashFuncT hash_func) {
-        map_iter map_it = freq_map_.begin();
-        ElemT elem      = map_it->second;
+        cache_iter cache_it = cache_.begin();
+        ElemT elem      = cache_it->second;
         KeyT key        = hash_func(elem);
 
-        cache_.erase(key);
-        freq_map_.erase(map_it);
+        hash_.erase(key);
+        cache_.erase(cache_it);
     }
 
     void insert_elem(ElemT elem, KeyT key) {
-        map_iter map_it = freq_map_.emplace(1, elem);
-        cache_.emplace(key, map_it);
+        cache_iter cache_it = cache_.emplace(1, elem);
+        hash_.emplace(key, cache_it);
     }
 
-    void update_elem(cache_iter cache_it, ElemT elem, KeyT key) {
-        map_iter map_it = cache_it->second;
-        int new_frequency = map_it->first + 1;
-        freq_map_.erase(map_it);
+    void update_elem(hash_iter hash_it, ElemT elem, KeyT key) {
+        cache_iter cache_it = hash_it->second;
+        int new_frequency = cache_it->first + 1;
+        cache_.erase(cache_it);
 
-        map_iter map_it_new = freq_map_.emplace(map_it->first + 1, elem);
-        cache_.emplace(key, map_it);
+        cache_.emplace(cache_it->first + 1, elem);
+        hash_.emplace(key, cache_it);
     }
     
     template <typename HashFuncT> bool lookup_update(ElemT elem, HashFuncT hash_func) {
         KeyT key = hash_func(elem);
-        cache_iter cache_it = cache_.find(key);
-        if(cache_it == cache_.end()) {
+        hash_iter hash_it = hash_.find(key);
+        if(hash_it == hash_.end()) {
 
             if (full()) 
                 delete_elem(hash_func);
@@ -58,16 +59,17 @@ public:
             return false;
         }
         
-        update_elem(cache_it, elem, key);
+        update_elem(hash_it, elem, key);
         return true;
     }
 
     void print() const {
-        std::cout << print_lblue("\nCache:\n");
+        std::cout << print_lblue("\nCache:\nfreq\telem\n");
         for (auto cache_it : cache_) {
-            map_iter map_it = cache_it.second;
-            std::cout << print_lcyan(map_it->first) << '\t' << print_lcyan(map_it->second) << '\n';
+            std::cout << print_lcyan(cache_it.first) << '\t' << print_lcyan(cache_it.second) << '\n';
         }
         std::cout << '\n';
     }
 };
+
+}
