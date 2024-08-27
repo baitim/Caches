@@ -1,7 +1,7 @@
 #!/bin/bash
 
-lfu_exe="../build/lfu"
-belady_exe="../build/belady"
+lfu_exe="../build/lfu/lfu"
+belady_exe="../build/belady/belady"
 answer_file="answer.dat"
 
 touch $answer_file
@@ -17,9 +17,9 @@ do
     ratio=$((10**4 * belady_hits/lfu_hits))e-4
 
     echo $file
-    echo "LFU   hits:    " $lfu_hits
-    echo "Belady hits:   " $belady_hits
-    printf "Ratio:\t\t%.2f\n" $ratio
+    printf "LFU    hits:\t%d\n" $lfu_hits
+    printf "Belady hits:\t%d\n" $belady_hits
+    printf "Ratio:\t\t%.2f\n"   $ratio
     echo
 
     printf "$file\t\t$lfu_hits\t\t\t$belady_hits\t\t\t%.2f\n" $ratio >> $answer_file

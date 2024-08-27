@@ -2,7 +2,7 @@
 
 ## Description
 
- Implementation of the LFU(least frequently used) cache.
+ Implementation of the LFU(least frequently used) cache and a comparison with the Belady's cache.
 
 ## How to run
 
@@ -12,8 +12,12 @@
 2. Go to folder <br>
     write <code>cd LFU_cache</code> in terminal
 
-3. Build & Run <br>
-    write <code>make</code> in terminal
+3. Build <br>
+    write <code>cmake . -B build & cmake --build build</code> in terminal
+
+4. Run <br>
+    for LFU:    write <code>./build/lfu/lfu</code> in terminal
+    for Belady: write <code>./build/belady/belady</code> in terminal
 
 ## How to test
 
