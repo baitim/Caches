@@ -16,7 +16,7 @@
     write <code>cmake . -B build & cmake --build build</code> in terminal
 
 4. Run <br>
-    for LFU:    write <code>./build/lfu/lfu</code> in terminal
+    for LFU:    write <code>./build/lfu/lfu</code> in terminal <br>
     for Belady: write <code>./build/belady/belady</code> in terminal
 
 ## How to test
