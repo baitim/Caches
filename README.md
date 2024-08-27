@@ -13,7 +13,7 @@
     write <code>cd LFU_cache</code> in terminal
 
 3. Build <br>
-    write <code>cmake . -B build & cmake --build build</code> in terminal
+    write <code>cmake . -B build ; cmake --build build</code> in terminal
 
 4. Run <br>
     for LFU:    write <code>./build/lfu/lfu</code> in terminal <br>
