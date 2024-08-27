@@ -1,5 +1,4 @@
-#ifndef SRC_ANSI_COLORS_H
-#define SRC_ANSI_COLORS_H
+#pragma once
 
 #define ANSI_DEFAULT_COLOR   "\033[0m"
 #define ANSI_YELLOW          "\033[33m"
@@ -15,5 +14,3 @@
 #define print_lyellow(s)    ANSI_LIGHT_YELLOW  << s << ANSI_DEFAULT_COLOR
 #define print_lblue(s)      ANSI_LIGHT_BLUE    << s << ANSI_DEFAULT_COLOR
 #define print_lcyan(s)      ANSI_LIGHT_CYAN    << s << ANSI_DEFAULT_COLOR
-
-#endif // SRC_ANSI_COLORS_H
