@@ -1,4 +1,4 @@
-file			lfu_hits	ideal_hits		ratio
+file			lfu_hits	belady_hits		ratio
 test_01.dat		703			5294			7,53
 test_02.dat		918			6321			6,89
 test_03.dat		435			4273			9,82

@@ -3,13 +3,13 @@
 #include <list>
 #include <map>
 #include <unordered_map>
-#include "ANSI_colors.hpp"
+#include "../include/ANSI_colors.hpp"
 
 int int2int(int elem) {
     return elem;
 }
 
-namespace cache {
+namespace cache_belady {
 
 template <typename ElemT, typename KeyT = int> class cache_t final {
     int size_;

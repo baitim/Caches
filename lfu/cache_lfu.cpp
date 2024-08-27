@@ -1,6 +1,5 @@
 #include <iostream>
-#include <vector>
-#include "cache.hpp"
+#include "cache_lfu.hpp"
 
 int main()
 {
@@ -12,21 +11,17 @@ int main()
         return 0;
     }
 
-    std::vector<int> elems;
+    cache_lfu::cache_t<int> cache(cache_size);
+
+    int hits = 0;
     for (int i = 0, elem; i < count_of_elems; ++i) {
         std::cin >> elem;
-        elems.push_back(elem);
-    }
 
-    cache::cache_t<int> cache(cache_size, elems, int2int);
-    int hits = 0;
-    for (int i = 0; i < count_of_elems; ++i) {
-        if (cache.lookup_update(elems[i], int2int))
+        if (cache.lookup_update(elem, int2int))
             hits++;
 
 #ifdef DEBUG
         cache.print();
-        cache.print_indexes();
 #endif
     }
 
