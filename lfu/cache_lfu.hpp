@@ -35,12 +35,13 @@ public:
     }
 
     void update_elem(hash_iter hash_it, ElemT elem, KeyT key) {
-        cache_iter cache_it = hash_it->second;
-        int new_frequency = cache_it->first + 1;
-        cache_.erase(cache_it);
+        cache_iter cache_it_old = hash_it->second;
+        int new_frequency = cache_it_old->first + 1;
+        cache_.erase(cache_it_old);
+        hash_.erase(key);
 
-        cache_.emplace(cache_it->first + 1, elem);
-        hash_.emplace(key, cache_it);
+        cache_iter cache_it_new = cache_.emplace(new_frequency, elem);
+        hash_.emplace(key, cache_it_new);
     }
     
     template <typename HashFuncT> bool lookup_update(ElemT elem, HashFuncT hash_func) {
