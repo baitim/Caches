@@ -1,6 +1,10 @@
 #include <iostream>
 #include "cache_lfu.hpp"
 
+int int2int(int elem) {
+    return elem;
+}
+
 int main()
 {
     int cache_size = 0, count_of_elems = 0;
