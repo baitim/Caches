@@ -35,4 +35,5 @@ int main()
     }
 
     std::cout << hits << "\n";
+    return 0;
 }
