@@ -29,12 +29,12 @@ public:
         cache_.erase(cache_it);
     }
 
-    void insert_elem(ElemT elem, KeyT key) {
+    void insert_elem(const ElemT& elem, KeyT key) {
         cache_iter cache_it = cache_.emplace(1, elem);
         hash_.emplace(key, cache_it);
     }
 
-    void update_elem(hash_iter hash_it, ElemT elem, KeyT key) {
+    void update_elem(hash_iter hash_it, const ElemT& elem, KeyT key) {
         cache_iter cache_it_old = hash_it->second;
         int new_frequency = cache_it_old->first + 1;
         cache_.erase(cache_it_old);
@@ -44,7 +44,7 @@ public:
         hash_.emplace(key, cache_it_new);
     }
     
-    template <typename HashFuncT> bool lookup_update(ElemT elem, HashFuncT hash_func) {
+    template <typename HashFuncT> bool lookup_update(const ElemT& elem, HashFuncT hash_func) {
         KeyT key = hash_func(elem);
         hash_iter hash_it = hash_.find(key);
         if(hash_it == hash_.end()) {

@@ -17,7 +17,7 @@ template <typename ElemT, typename KeyT = int> class cache_t final {
 
 public:
     template <typename HashFuncT>
-    cache_t(int size, std::vector<int> elems, HashFuncT hash_func) : size_(size)  {
+    cache_t(int size, const std::vector<int>& elems, HashFuncT hash_func) : size_(size)  {
         for (int i = 0, count = elems.size(); i < count; ++i) {
             KeyT key = hash_func(elems[i]);
 
@@ -58,7 +58,7 @@ public:
         cache_.erase(cache_it);
     }
 
-    void insert_elem(ElemT elem, KeyT key) {
+    void insert_elem(const ElemT& elem, KeyT key) {
         cache_.push_front(std::make_pair(key, elem));
         hash_.emplace(key, cache_.begin());
 
@@ -71,7 +71,7 @@ public:
     }
     
     template <typename HashFuncT>
-    bool lookup_update(ElemT elem, HashFuncT hash_func) {
+    bool lookup_update(const ElemT& elem, HashFuncT hash_func) {
         KeyT key = hash_func(elem);
 
         hash_iter hash_it = hash_.find(key);
