@@ -14,7 +14,7 @@ template <typename ElemT, typename KeyT = int> class cache_t final {
     std::unordered_map<KeyT, cache_iter> hash_;
 
 public:
-    cache_t(int size) : size_(size) {};
+    cache_t(int size) : size_(size) {}
 
     bool full() const { 
         return (hash_.size() == size_); 

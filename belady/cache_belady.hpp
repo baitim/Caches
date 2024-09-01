@@ -27,7 +27,7 @@ public:
             else
                 ind_it->second.push_back(i);
         }
-    };
+    }
 
     bool full() const { 
         return (cache_.size() == size_); 
