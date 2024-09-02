@@ -8,6 +8,10 @@ namespace cache_belady {
 
 template <typename ElemT, typename KeyT = int> class cache_t final {
     int size_;
+
+    using HashFuncT = KeyT (*)(ElemT elem);
+    HashFuncT hash_func_;
+
     using cache_iter = typename std::list<std::pair<KeyT, ElemT>>::iterator;
     using hash_iter  = typename std::unordered_map<KeyT, cache_iter>::iterator;
     using ind_iter   = typename std::unordered_map<KeyT, std::list<int>>::iterator;
@@ -16,10 +20,9 @@ template <typename ElemT, typename KeyT = int> class cache_t final {
     std::unordered_map<KeyT, std::list<int>> indexes;
 
 public:
-    template <typename HashFuncT>
-    cache_t(int size, const std::vector<int>& elems, HashFuncT hash_func) : size_(size)  {
+    cache_t(int size, const std::vector<int>& elems, HashFuncT hash_func) : size_(size), hash_func_(hash_func) {
         for (int i = 0, count = elems.size(); i < count; ++i) {
-            KeyT key = hash_func(elems[i]);
+            KeyT key = hash_func_(elems[i]);
 
             ind_iter ind_it = indexes.find(key);
             if(ind_it == indexes.end())
@@ -30,12 +33,17 @@ public:
     }
 
     bool full() const { 
-        return (cache_.size() == size_); 
+        return ((int)cache_.size() == size_); 
     }
 
-    void delete_elem() {
-        KeyT key_pop = cache_.front().first;
-        int  dist_pop = -1;
+    void delete_elem(KeyT key) {
+        ind_iter ind_it = indexes.find(key);
+        if (ind_it->second.empty())
+            return;
+
+        KeyT key_pop = key;
+        int dist_pop = ind_it->second.front();
+
         for (cache_iter cache_it = cache_.begin(), end = cache_.end(); cache_it != end; ++cache_it) {
             KeyT elem_key = cache_it->first;
 
@@ -53,6 +61,9 @@ public:
             }
         }
 
+        if (key_pop == key)
+            return;
+
         cache_iter cache_it = hash_.find(key_pop)->second;
         hash_.erase(key_pop);
         cache_.erase(cache_it);
@@ -61,8 +72,6 @@ public:
     void insert_elem(const ElemT& elem, KeyT key) {
         cache_.push_front(std::make_pair(key, elem));
         hash_.emplace(key, cache_.begin());
-
-        update_elem(key);
     }
 
     void update_elem(KeyT key) {
@@ -70,21 +79,21 @@ public:
         ind_it->second.pop_front();
     }
     
-    template <typename HashFuncT>
-    bool lookup_update(const ElemT& elem, HashFuncT hash_func) {
-        KeyT key = hash_func(elem);
+    bool lookup_update(const ElemT& elem) {
+        KeyT key = hash_func_(elem);
+        update_elem(key);
 
         hash_iter hash_it = hash_.find(key);
         if(hash_it == hash_.end()) {
 
             if (full()) 
-                delete_elem();
+                delete_elem(key);
             
-            insert_elem(elem, key);
+            if (!full())
+                insert_elem(elem, key);
+
             return false;
         }
-
-        update_elem(key);
         return true;
     }
 

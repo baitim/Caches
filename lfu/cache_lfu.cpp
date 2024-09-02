@@ -15,13 +15,13 @@ int main()
         return 0;
     }
 
-    cache_lfu::cache_t<int> cache(cache_size);
+    cache_lfu::cache_t<int> cache(cache_size, int2int);
 
     int hits = 0;
     for (int i = 0, elem; i < count_of_elems; ++i) {
         std::cin >> elem;
 
-        if (cache.lookup_update(elem, int2int))
+        if (cache.lookup_update(elem))
             hits++;
 
 #ifdef DEBUG

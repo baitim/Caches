@@ -25,7 +25,7 @@ int main()
     cache_belady::cache_t<int> cache(cache_size, elems, int2int);
     int hits = 0;
     for (int i = 0; i < count_of_elems; ++i) {
-        if (cache.lookup_update(elems[i], int2int))
+        if (cache.lookup_update(elems[i]))
             hits++;
 
 #ifdef DEBUG

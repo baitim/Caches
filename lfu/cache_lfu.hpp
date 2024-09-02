@@ -8,22 +8,26 @@ namespace cache_lfu {
 
 template <typename ElemT, typename KeyT = int> class cache_t final {
     int size_;
+
+    using HashFuncT = KeyT (*)(ElemT elem);
+    HashFuncT hash_func_;
+
     using cache_iter = typename std::multimap<int, ElemT>::iterator;
     using hash_iter  = typename std::unordered_map<KeyT, cache_iter>::iterator;
     std::multimap<int, ElemT>            cache_; // frequency - element
     std::unordered_map<KeyT, cache_iter> hash_;
 
 public:
-    cache_t(int size) : size_(size) {}
+    cache_t(int size, HashFuncT hash_func) : size_(size), hash_func_(hash_func) {}
 
     bool full() const { 
-        return (hash_.size() == size_); 
+        return ((int)hash_.size() == size_); 
     }
 
-    template <typename HashFuncT> void delete_elem(HashFuncT hash_func) {
+    void delete_elem() {
         cache_iter cache_it = cache_.begin();
-        ElemT elem      = cache_it->second;
-        KeyT key        = hash_func(elem);
+        ElemT elem = cache_it->second;
+        KeyT key   = hash_func_(elem);
 
         hash_.erase(key);
         cache_.erase(cache_it);
@@ -44,13 +48,13 @@ public:
         hash_.emplace(key, cache_it_new);
     }
     
-    template <typename HashFuncT> bool lookup_update(const ElemT& elem, HashFuncT hash_func) {
-        KeyT key = hash_func(elem);
+    bool lookup_update(const ElemT& elem) {
+        KeyT key = hash_func_(elem);
         hash_iter hash_it = hash_.find(key);
         if(hash_it == hash_.end()) {
 
             if (full()) 
-                delete_elem(hash_func);
+                delete_elem();
             
             insert_elem(elem, key);
             return false;
