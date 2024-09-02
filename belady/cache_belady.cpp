@@ -2,8 +2,12 @@
 #include <vector>
 #include "cache_belady.hpp"
 
-int int2int(int elem) {
+int hash_func(int elem) {
     return elem;
+}
+
+int slow_get_elem(int key) {
+    return key;
 }
 
 int main()
@@ -16,17 +20,15 @@ int main()
         return 0;
     }
 
-    std::vector<int> elems;
+    std::vector<int> keys;
     for (int i = 0, elem; i < count_of_elems; ++i) {
         std::cin >> elem;
-        elems.push_back(elem);
+        keys.push_back(hash_func(elem));
     }
 
-    cache_belady::cache_t<int> cache(cache_size, elems, int2int);
-    int hits = 0;
+    cache_belady::cache_t<int> cache(cache_size, keys);
     for (int i = 0; i < count_of_elems; ++i) {
-        if (cache.lookup_update(elems[i]))
-            hits++;
+        cache.lookup_update(keys[i], slow_get_elem);
 
 #ifdef DEBUG
         cache.print();
@@ -34,6 +36,6 @@ int main()
 #endif
     }
 
-    std::cout << hits << "\n";
+    std::cout << cache.get_hits() << "\n";
     return 0;
 }

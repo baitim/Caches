@@ -8,9 +8,7 @@ namespace cache_belady {
 
 template <typename ElemT, typename KeyT = int> class cache_t final {
     int size_;
-
-    using HashFuncT = KeyT (*)(ElemT elem);
-    HashFuncT hash_func_;
+    int hits_ = 0;
 
     using cache_iter = typename std::list<std::pair<KeyT, ElemT>>::iterator;
     using hash_iter  = typename std::unordered_map<KeyT, cache_iter>::iterator;
@@ -19,19 +17,7 @@ template <typename ElemT, typename KeyT = int> class cache_t final {
     std::unordered_map<KeyT, cache_iter>     hash_;
     std::unordered_map<KeyT, std::list<int>> indexes;
 
-public:
-    cache_t(int size, const std::vector<int>& elems, HashFuncT hash_func) : size_(size), hash_func_(hash_func) {
-        for (int i = 0, count = elems.size(); i < count; ++i) {
-            KeyT key = hash_func_(elems[i]);
-
-            ind_iter ind_it = indexes.find(key);
-            if(ind_it == indexes.end())
-                indexes.emplace(key, std::list<int> (1, i));
-            else
-                ind_it->second.push_back(i);
-        }
-    }
-
+private:
     bool full() const { 
         return ((int)cache_.size() == size_); 
     }
@@ -78,9 +64,25 @@ public:
         ind_iter ind_it = indexes.find(key);
         ind_it->second.pop_front();
     }
+
+public:
+    cache_t(int size, const std::vector<int>& keys) : size_(size) {
+        for (int i = 0, count = keys.size(); i < count; ++i) {
+            KeyT key = keys[i];
+
+            ind_iter ind_it = indexes.find(key);
+            if(ind_it == indexes.end())
+                indexes.emplace(key, std::list<int> (1, i));
+            else
+                ind_it->second.push_back(i);
+        }
+    }
+
+    int get_hits() {
+        return hits_;
+    }
     
-    bool lookup_update(const ElemT& elem) {
-        KeyT key = hash_func_(elem);
+    template <typename SlowGetElemT> bool lookup_update(const KeyT& key, SlowGetElemT slow_get_elem) {
         update_elem(key);
 
         hash_iter hash_it = hash_.find(key);
@@ -89,12 +91,18 @@ public:
             if (full()) 
                 delete_elem(key);
             
+            ElemT elem = slow_get_elem(key);
             if (!full())
                 insert_elem(elem, key);
 
-            return false;
+            return elem;
         }
-        return true;
+
+        hits_++;
+        hash_it = hash_.find(key);
+        cache_iter cache_it = hash_it->second;
+        ElemT elem = cache_it->second;
+        return elem;
     }
 
     void print() const {
