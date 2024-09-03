@@ -1,7 +1,7 @@
 #!/bin/bash
 
-lfu_exe="../build/lfu/lfu"
-belady_exe="../build/belady/belady"
+lfu_exe="../build/tests/lfu"
+belady_exe="../build/tests/belady"
 answer_file="answer.dat"
 
 touch $answer_file
