@@ -2,14 +2,14 @@
 
 lfu_exe="../build/tests/lfu"
 belady_exe="../build/tests/belady"
-answer_file="answer.dat"
+answer_file="tests_dat/answer.dat"
 
 touch $answer_file
 echo -n > $answer_file
 
 printf "file\t\t\tlfu_hits\tbelady_hits\t\tratio\n" >> $answer_file
 
-for file in test_*.dat
+for file in tests_dat/test_*.dat
 do
     run_file="./${file}"
     lfu_hits=$($lfu_exe < $run_file)
