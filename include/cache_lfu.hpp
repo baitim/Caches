@@ -48,7 +48,7 @@ private:
 public:
     cache_t(int size) : size_(size) {}
 
-    int get_hits() {
+    int get_hits() const {
         return hits_;
     }
     

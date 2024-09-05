@@ -78,7 +78,7 @@ public:
         }
     }
 
-    int get_hits() {
+    int get_hits() const {
         return hits_;
     }
     
