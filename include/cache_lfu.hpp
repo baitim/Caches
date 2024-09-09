@@ -52,7 +52,7 @@ public:
         return hits_;
     }
     
-    template <typename SlowGetElemT> bool lookup_update(const KeyT& key, SlowGetElemT slow_get_elem) {
+    template <typename SlowGetElemT> ElemT lookup_update(const KeyT& key, SlowGetElemT slow_get_elem) {
         hash_iter hash_it = hash_.find(key);
         if(hash_it == hash_.end()) {
 
