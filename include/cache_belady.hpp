@@ -66,15 +66,19 @@ private:
     }
 
 public:
-    cache_t(int size, const std::vector<int>& keys) : size_(size) {
-        for (int i = 0, count = keys.size(); i < count; ++i) {
-            KeyT key = keys[i];
+    template <typename It>
+    cache_t(int size, It start, It end) : size_(size) {
+        int ind = 0;
+        for (It iter = start; iter != end; ++iter) {
+            KeyT key = *iter;
 
             ind_iter ind_it = indexes.find(key);
             if(ind_it == indexes.end())
-                indexes.emplace(key, std::list<int> (1, i));
+                indexes.emplace(key, std::list<int> (1, ind));
             else
-                ind_it->second.push_back(i);
+                ind_it->second.push_back(ind);
+
+            ind++;
         }
     }
 

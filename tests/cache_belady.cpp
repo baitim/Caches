@@ -26,7 +26,7 @@ int main()
         keys.push_back(hash_func(elem));
     }
 
-    cache_belady::cache_t<int> cache(cache_size, keys);
+    cache_belady::cache_t<int> cache(cache_size, keys.begin(), keys.end());
     for (int i = 0; i < count_of_elems; ++i) {
         cache.lookup_update(keys[i], slow_get_elem);
 
