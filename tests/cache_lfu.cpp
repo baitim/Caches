@@ -1,10 +1,6 @@
 #include <iostream>
 #include "cache_lfu.hpp"
 
-int hash_func(int elem) {
-    return elem;
-}
-
 int slow_get_elem(int key) {
     return key;
 }
@@ -23,7 +19,7 @@ int main()
 
     for (int i = 0, elem; i < count_of_elems; ++i) {
         std::cin >> elem;
-        cache.lookup_update(hash_func(elem), slow_get_elem);
+        cache.lookup_update(elem, slow_get_elem);
 
 #ifdef DEBUG
         cache.print();

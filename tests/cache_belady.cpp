@@ -2,10 +2,6 @@
 #include <vector>
 #include "cache_belady.hpp"
 
-int hash_func(int elem) {
-    return elem;
-}
-
 int slow_get_elem(int key) {
     return key;
 }
@@ -23,7 +19,7 @@ int main()
     std::vector<int> keys;
     for (int i = 0, elem; i < count_of_elems; ++i) {
         std::cin >> elem;
-        keys.push_back(hash_func(elem));
+        keys.push_back(elem);
     }
 
     cache_belady::cache_t<int> cache(cache_size, keys.begin(), keys.end());
