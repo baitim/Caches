@@ -2,7 +2,7 @@ import os
 import glob
 import subprocess
 
-to_curr_dir = "../../tests/tests_dat/"
+to_curr_dir = os.path.dirname(os.path.realpath(__file__)) + "/tests_dat/"
 
 lfu_exe    = "./lfu"
 belady_exe = "./belady"

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.11)
-project(cache_lfu)
+project(src)
 
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 
@@ -9,7 +9,7 @@ target_include_directories(lfu PUBLIC ${INCLUDE_DIR})
 add_executable(belady cache_belady.cpp)
 target_include_directories(belady PUBLIC ${INCLUDE_DIR})
 
-set(PYTHON_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/run_tests.py")
+set(PYTHON_SCRIPT "${CMAKE_SOURCE_DIR}/tests/run_tests.py")
 add_test(
     NAME caches_tests
     COMMAND python3 ${PYTHON_SCRIPT}
