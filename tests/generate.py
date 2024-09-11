@@ -2,7 +2,7 @@ import random
 count_tests = 10
 
 for i in range(0, count_tests) :
-    file_name = "tests_dat/test_" + f'{i+1:02}' + ".dat"
+    file_name = "tests_dat/test_" + f'{i+1:03}' + ".in"
     file = open(file_name, 'w')
 
     size_of_cache  = random.randint(1000, 2000)

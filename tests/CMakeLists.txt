@@ -8,3 +8,9 @@ target_include_directories(lfu PUBLIC ${INCLUDE_DIR})
 
 add_executable(belady cache_belady.cpp)
 target_include_directories(belady PUBLIC ${INCLUDE_DIR})
+
+set(PYTHON_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/run_tests.py")
+add_test(
+    NAME caches_tests
+    COMMAND python3 ${PYTHON_SCRIPT}
+)

@@ -21,16 +21,10 @@
 
 ## How to test
 
-1. Go to folder <br>
-    write <code>cd tests</code> in terminal
+1. Run testing <br>
+    write <code>ctest --test-dir build</code> in terminal
 
-2. Generate tests <br>
-    write <code>python3 generate.py</code> in terminal
-
-3. Run testing <br>
-    write <code>./run_tests.sh</code> in terminal
-
-The test result will be in the "answer.dat" file
+2. The test result will be in the "tests/tests_dat/answer.out" file
 
 <p align="center"><img src="https://github.com/baitim/LFU_cache/blob/main/images/cat.gif" width="40%"></p>
 
