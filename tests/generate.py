@@ -13,7 +13,7 @@ for i in range(0, count_tests) :
     for j in range(count_of_elems) :
         if (j % 10000 == 0) :
             print("elems: ", j / 10000)
-        test_str += str(random.randint(1, 10000)) + " "
+        test_str += str(random.randint(1, 3500)) + " "
 
     file.write(test_str)
     file.close()

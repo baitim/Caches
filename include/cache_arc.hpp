@@ -7,10 +7,11 @@
 namespace cache_arc {
 
 template <typename ElemT, typename KeyT = int> class cache_t final {
+    int cache_size_;
     int size_t1_, size_t2_;
     int size_b1_, size_b2_;
     int hits_ = 0;
-    int size_factor_ = 0;
+    int size_factor_1;
 
     using cache_iter_b = typename std::list<KeyT>::iterator;
     using cache_iter_t = typename std::list<std::pair<KeyT, ElemT>>::iterator;
@@ -125,6 +126,16 @@ private:
         ht_t2_.emplace(key, cache_t2_.begin());
     }
 
+    bool is_in_t(KeyT key) const {
+        if (ht_t1_.find(key) != ht_t1_.end())
+            return true;
+
+        if (ht_t2_.find(key) != ht_t2_.end())
+            return true;
+
+        return false;
+    }
+
     void insert_new_elem(const ElemT& elem, KeyT key) {
         if (size_t1_ <= 0) 
             return;
@@ -136,23 +147,13 @@ private:
         ht_t1_.emplace(key, cache_t1_.begin());
     }
 
-    bool is_in_t(KeyT key) {
-        if (ht_t1_.find(key) != ht_t1_.end())
-            return true;
-
-        if (ht_t2_.find(key) != ht_t2_.end())
-            return true;
-
-        return false;
-    }
-
     void move_factor() {
-        if (size_factor_ > 0 && size_t2_ > 0) {
+        if (size_factor_1 > (int)cache_t1_.size()) {
             if (full_t2())
                 decrease_t2();
             size_t1_++;
             size_t2_--;
-        } else if (size_factor_ < 0 && size_t1_ > 0) {
+        } else if (size_factor_1 < (int)cache_t1_.size()) {
             if (full_t1())
                 decrease_t1();
             size_t2_++;
@@ -162,19 +163,16 @@ private:
 
     void update(KeyT key) {
         if (is_old(key) && !is_in_t(key)) {
-            if (ht_b1_.find(key) != ht_b1_.end()) {
-                size_factor_++;
-                decrease_t2();
-            } else {
-                size_factor_--;
-                decrease_t1();
-            }
+            if (ht_b1_.find(key) != ht_b1_.end())
+                size_factor_1 = std::min(size_factor_1 + 1, cache_size_);
+            else
+                size_factor_1 = std::max(size_factor_1 - 1, 0);
         } else {
             move_factor();
         }
     }
 
-    bool is_old(KeyT key) {
+    bool is_old(KeyT key) const {
         if (is_in_t(key))
             return true;
         
@@ -201,8 +199,8 @@ private:
     }
 
 public:
-    cache_t(int size) : size_t1_(size / 2), size_t2_(size - size_t1_),
-                        size_b1_(size_t1_),  size_b2_(size_t2_){}
+    cache_t(int size) : cache_size_(size),  size_t1_(size / 2), size_t2_(size - size_t1_),
+                        size_b1_(size_t1_), size_b2_(size_t2_), size_factor_1(size_t1_){}
 
     int get_hits() const {
         return hits_;
@@ -228,9 +226,9 @@ public:
 
     void print() const {
         std::cout << print_lblue("\nCache:\nkey\telem\n");
-        std::cout << print_lblue("size_t1_ = " << size_t1_ << "\tsize_t2_"     << size_t2_ << "\n");
-        std::cout << print_lblue("size_b1_ = " << size_b1_ << "\tsize_b2_"     << size_b2_ << "\n");
-        std::cout << print_lblue("hits_ = "    << hits_ <<    "\tsize_factor_" << size_factor_ << "\n");
+        std::cout << print_lblue("size_t1_ = " << size_t1_ << "\tsize_t2_ = "     << size_t2_ << "\n");
+        std::cout << print_lblue("size_b1_ = " << size_b1_ << "\tsize_b2_ = "     << size_b2_ << "\n");
+        std::cout << print_lblue("hits_ = "    << hits_ <<    "\tsize_factor_ = " << size_factor_1 << "\n");
 
         for (auto cache_it : cache_b1_)
             std::cout << print_lcyan("(" << cache_it << "),");

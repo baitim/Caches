@@ -1,4 +1,4 @@
-<h1 align="center">LFU cache</h1>
+<h1 align="center">Caches</h1>
 
 ## Description
 
