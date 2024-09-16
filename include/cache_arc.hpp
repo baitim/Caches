@@ -164,9 +164,9 @@ private:
     void update(KeyT key) {
         if (is_old(key) && !is_in_t(key)) {
             if (ht_b1_.find(key) != ht_b1_.end())
-                size_factor_1 = std::min(size_factor_1 + 1, cache_size_);
+                size_factor_1 = std::min(size_factor_1 + 1, cache_size_ - 1);
             else
-                size_factor_1 = std::max(size_factor_1 - 1, 0);
+                size_factor_1 = std::max(size_factor_1 - 1, 1);
         } else {
             move_factor();
         }
